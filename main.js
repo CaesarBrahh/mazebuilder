@@ -1,5 +1,7 @@
 // score
 
+let isRunning = true;
+
 // board
 let blockSize = 25;
 let rows = 20;
@@ -33,6 +35,8 @@ window.onload = function() {
 }
 
 function update() {
+    if (!isRunning) return;
+    
     context.fillStyle = "black";
     context.fillRect(0, 0, board.width, board.height);
 
@@ -52,6 +56,11 @@ function update() {
     context.fillStyle = "blue";
     for (let i = 0; i < blocks.length; i++) {
         context.fillRect(blocks[i][0], blocks[i][1], blockSize, blockSize);
+    }
+
+    // death
+    if (snakeX > board.width || snakeX < 0 || snakeY > board.height || snakeY < 0) {
+        isRunning = false;
     }
 }
 
