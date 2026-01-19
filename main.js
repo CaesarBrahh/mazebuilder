@@ -59,13 +59,13 @@ function update() {
         context.fillRect(blocks[i][0], blocks[i][1], blockSize, blockSize);
 
         if (snakeX == blocks[i][0] && snakeY == blocks[i][1]) {
-            isRunning = false;
+            gameOver();
         }
     }
 
     // death
     if (snakeX > board.width || snakeX < 0 || snakeY > board.height || snakeY < 0) {
-        isRunning = false;
+        gameOver();
     }
 }
 
@@ -106,4 +106,21 @@ function addBlock() {
     let blockY = foodY;
 
     blocks.push([blockX, blockY]);
+}
+
+function gameOver() {
+    isRunning = false;
+    document.getElementById('game-over-modal').style.display = 'block';
+}
+
+function restartGame() {
+    document.getElementById('game-over-modal').style.display = 'none';
+    document.getElementById('score').innerText = "Score: 0";
+    blocks = [];
+    snakeX = blockSize * 5
+    snakeY = blockSize * 5
+    velocityX = 0;
+    velocityY = 0;
+    placeFood();
+    isRunning = true;
 }
