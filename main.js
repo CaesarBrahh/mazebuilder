@@ -36,7 +36,7 @@ window.onload = function() {
 
 function update() {
     if (!isRunning) return;
-    
+
     context.fillStyle = "black";
     context.fillRect(0, 0, board.width, board.height);
 
@@ -56,6 +56,10 @@ function update() {
     context.fillStyle = "blue";
     for (let i = 0; i < blocks.length; i++) {
         context.fillRect(blocks[i][0], blocks[i][1], blockSize, blockSize);
+
+        if (snakeX == blocks[i][0] && snakeY == blocks[i][1]) {
+            isRunning = false;
+        }
     }
 
     // death
