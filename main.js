@@ -19,7 +19,7 @@ let foodX;
 let foodY;
 
 // blocks
-let blocks = [[]]
+let blocks = []
 
 window.onload = function() {
     board = document.getElementById("board")
@@ -29,7 +29,7 @@ window.onload = function() {
 
     placeFood();
     document.addEventListener("keyup", changeDirection);
-    setInterval(update, 1000/10);
+    setInterval(update, 1500/10);
 }
 
 function update() {
@@ -50,7 +50,7 @@ function update() {
     context.fillRect(snakeX, snakeY, blockSize, blockSize);
 
     context.fillStyle = "blue";
-    for (let i = 0; i <= blocks.length; i++) {
+    for (let i = 0; i < blocks.length; i++) {
         context.fillRect(blocks[i][0], blocks[i][1], blockSize, blockSize);
     }
 }
@@ -72,9 +72,19 @@ function changeDirection(e) {
 }
 
 function placeFood() {
-    // ensure that food isn't placed in position of blocks
     foodX = Math.floor(Math.random() * cols) * blockSize;
     foodY = Math.floor(Math.random() * rows) * blockSize;
+
+    if (blocks.length > 1) {
+        for (let i = 0; i < blocks.length; i++) {
+            if (foodX == blocks[i][0] && foodY == blocks[i][1]) {
+                i = 0;
+                foodX = Math.floor(Math.random() * cols) * blockSize;
+                foodY = Math.floor(Math.random() * rows) * blockSize;
+                continue;
+            }
+        }
+    }
 }
 
 function addBlock() {
