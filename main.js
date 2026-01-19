@@ -46,6 +46,7 @@ function update() {
     if (snakeX == foodX && snakeY == foodY) {
         addBlock();
         placeFood(); 
+        document.getElementById("score").innerHTML = "Score: " + blocks.length;
     }
 
     context.fillStyle = "lime";
