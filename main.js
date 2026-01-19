@@ -1,3 +1,5 @@
+// score
+
 // board
 let blockSize = 25;
 let rows = 20;
@@ -13,11 +15,11 @@ let velocityX = 0;
 let velocityY = 0;
 
 // food
-var foodX;
-var foodY;
+let foodX;
+let foodY;
 
 // blocks
-blocks = []
+let blocks = [[]]
 
 window.onload = function() {
     board = document.getElementById("board")
@@ -48,8 +50,8 @@ function update() {
     context.fillRect(snakeX, snakeY, blockSize, blockSize);
 
     context.fillStyle = "blue";
-    for (block in blocks) {
-        context.fillRect(block[0], block[1], blockSize, blockSize);
+    for (let i = 0; i <= blocks.length; i++) {
+        context.fillRect(blocks[i][0], blocks[i][1], blockSize, blockSize);
     }
 }
 
@@ -76,8 +78,8 @@ function placeFood() {
 }
 
 function addBlock() {
-    blockX = foodX;
-    blockY = foodY;
+    let blockX = foodX;
+    let blockY = foodY;
 
     blocks.push([blockX, blockY]);
 }
