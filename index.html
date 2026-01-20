@@ -8,16 +8,23 @@
   </head>
   <body>
     <h1>Maze Builder</h1>
-    <canvas id="board"></canvas>
+
+    <div class="canvas-wrap">
+      <canvas id="board"></canvas>
+    </div>
+
     <h3 id="score">Score: 0</h3>
-    <script src="main.js"></script>
 
     <!-- Game Over Modal -->
     <div id="game-over-modal" class="game-over" style="display: none;">
         <div class="game-over-content">
             <h2>Game Over!</h2>
+            <p>You built a maze you couldn't escape...</p>
+            <p><i id="final-score">Couldn't Pull</i></p>
             <button class="restart-btn" onclick="restartGame()">Play Again</button>
         </div>
     </div>
+
+    <script src="main.js"></script>
   </body>
 </html>

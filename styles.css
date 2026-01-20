@@ -1,18 +1,200 @@
-body{
-    font-family: 'Courier New', courier, monospace;
-    text-align: center;
+:root {
+  --bg0: #05060b;
+  --bg1: #0b1020;
+  --card: rgba(255, 255, 255, 0.06);
+  --stroke: rgba(255, 255, 255, 0.14);
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.68);
+  --accent: #a78bfa;   /* violet */
+  --accent2: #22d3ee;  /* cyan */
+  --danger: #fb7185;   /* rose */
+  --shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+  --shadow2: 0 10px 26px rgba(0, 0, 0, 0.45);
+  --radius: 18px;
 }
 
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  text-align: center;
+  color: var(--text);
+  background:
+    radial-gradient(900px 500px at 15% 10%, rgba(167,139,250,0.18), transparent 60%),
+    radial-gradient(900px 500px at 85% 20%, rgba(34,211,238,0.14), transparent 55%),
+    linear-gradient(180deg, var(--bg0), var(--bg1));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  padding: 16px 14px;
+}
+
+/* subtle grain overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+  opacity: 0.10;
+  mix-blend-mode: overlay;
+}
+
+/* Give the page a "card" feel without needing wrapper divs */
+body > h1,
+body > h3#score {
+  position: relative;
+  z-index: 1;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(30px, 4vw, 46px);
+  letter-spacing: -0.04em;
+  text-shadow: 0 12px 40px rgba(0,0,0,0.55);
+}
+
+/* little signature underline */
+h1::after {
+  content: "eat • build • escape";
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Score pill */
+#score {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.22);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: var(--shadow2);
+  color: rgba(255,255,255,0.93);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+/* Make the canvas feel like an arcade screen */
+.canvas-wrap {
+  position: relative;
+  display: inline-block;
+  max-height: calc(100vh - 170px);
+}
+
+.canvas-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -16px;
+  border-radius: 32px;
+  background:
+    radial-gradient(600px 220px at 30% 0%, rgba(167,139,250,0.35), transparent 60%),
+    radial-gradient(600px 220px at 70% 0%, rgba(34,211,238,0.28), transparent 60%);
+  filter: blur(16px);
+  opacity: 0.9;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#board {
+  height: min(72vh, 680px);
+  width: auto;
+  max-width: 92vw;
+  margin: 0;
+  border-radius: calc(var(--radius) + 2px);
+  background: linear-gradient(180deg, rgba(0,0,0,0.30), rgba(0,0,0,0.18));
+  border: 1px solid var(--stroke);
+  box-shadow:
+    0 20px 55px rgba(0,0,0,0.60),
+    0 0 0 6px rgba(0,0,0,0.18),
+    0 0 0 1px rgba(255,255,255,0.08) inset;
+  position: relative;
+  z-index: 1;
+}
+
+/* Game Over Modal */
 .game-over {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    backdrop-filter: blur(1px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(6px);
+}
+
+.game-over-content {
+  width: min(520px, 92vw);
+  padding: 26px 22px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: var(--shadow);
+}
+
+.game-over-content h2 {
+  margin: 0;
+  font-size: 34px;
+  letter-spacing: -0.03em;
+}
+
+/* Style your existing restart button */
+.restart-btn {
+  margin-top: 16px;
+  appearance: none;
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 999px;
+  padding: 12px 16px;
+  cursor: pointer;
+  color: rgba(255,255,255,0.96);
+  background: linear-gradient(90deg, rgba(167,139,250,0.95), rgba(34,211,238,0.88));
+  box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  transition: transform 120ms ease, filter 120ms ease;
+}
+
+.restart-btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+.restart-btn:active { transform: translateY(0px) scale(0.99); }
+
+/* Optional: add a little "danger" accent to Game Over without changing HTML */
+.game-over-content::before {
+  content: "☠";
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 12px;
+  border-radius: 16px;
+  background: rgba(251,113,133,0.14);
+  border: 1px solid rgba(251,113,133,0.35);
+  color: rgba(255,255,255,0.92);
+  font-size: 26px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+}
+
+/* Small screens */
+@media (max-width: 480px) {
+  #board { width: 92vw; }
+  #score { font-size: 16px; }
 }

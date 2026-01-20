@@ -1,5 +1,3 @@
-// score
-
 let isRunning = true;
 
 // board
@@ -40,7 +38,7 @@ function update() {
     context.fillStyle = "black";
     context.fillRect(0, 0, board.width, board.height);
 
-    context.fillStyle = "red";
+    context.fillStyle = "lime";
     context.fillRect(foodX, foodY, blockSize, blockSize);
 
     if (snakeX == foodX && snakeY == foodY) {
@@ -49,12 +47,12 @@ function update() {
         document.getElementById("score").innerHTML = "Score: " + blocks.length;
     }
 
-    context.fillStyle = "lime";
+    context.fillStyle = "#22d3ee";
     snakeX += velocityX * blockSize;
     snakeY += velocityY * blockSize;
     context.fillRect(snakeX, snakeY, blockSize, blockSize);
 
-    context.fillStyle = "blue";
+    context.fillStyle = "#e11d48";
     for (let i = 0; i < blocks.length; i++) {
         context.fillRect(blocks[i][0], blocks[i][1], blockSize, blockSize);
 
@@ -110,7 +108,8 @@ function addBlock() {
 
 function gameOver() {
     isRunning = false;
-    document.getElementById('game-over-modal').style.display = 'block';
+    document.getElementById('final-score').innerText = "Final Score: " + blocks.length;
+    document.getElementById('game-over-modal').style.display = 'flex';
 }
 
 function restartGame() {
